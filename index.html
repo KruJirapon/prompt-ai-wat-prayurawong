@@ -119,11 +119,48 @@
     .empty-state h3 { margin: 0 0 5px; font-size: 17px; }
     .empty-state p { margin: 0; color: var(--muted); font-size: 14px; }
     .footer-inner { padding: 18px 0 28px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; text-align: center; }
-    .modal-backdrop { position: fixed; inset: 0; z-index: 20; display: none; align-items: center; justify-content: center; padding: 18px; background: rgba(16,24,40,.48); }
-    .modal-backdrop.open { display: flex; }
+    /* หน้าต่างเพิ่ม/แก้ไข Prompt: ใช้ Grid เพื่อจัดกึ่งกลางจออย่างสม่ำเสมอ */
+    .modal-backdrop {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 1000;
+      display: none !important;
+      place-items: center;
+      padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+               max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+      background: rgba(16, 24, 40, .56);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .modal-backdrop.open {
+      display: grid !important;
+    }
     .modal {
-      width: min(560px, 100%); max-height: min(90vh, 850px); overflow: auto; background: white; border-radius: 20px;
-      padding: 23px; box-shadow: 0 24px 70px rgba(16,24,40,.25);
+      position: relative;
+      width: min(680px, calc(100vw - 32px));
+      max-width: 100%;
+      max-height: min(90vh, 850px);
+      max-height: min(90dvh, 850px);
+      margin: auto;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: white;
+      border: 1px solid rgba(255, 255, 255, .7);
+      border-radius: 22px;
+      padding: clamp(22px, 3vw, 32px);
+      box-shadow: 0 28px 90px rgba(16, 24, 40, .32);
+      animation: modalEnter .18s ease-out;
+    }
+    @keyframes modalEnter {
+      from { opacity: 0; transform: translateY(8px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .modal { animation: none; }
     }
     .modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 19px; }
     .modal-header h2 { font-size: 21px; margin: 0; }
@@ -132,9 +169,10 @@
     .form-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 15px; }
     .form-field label { font-size: 14px; font-weight: 700; }
     .form-field .optional { color: var(--muted); font-weight: 400; }
-    .form-field input, .form-field textarea { width: 100%; border: 1px solid #d0d5dd; border-radius: 11px; padding: 11px 12px; color: var(--ink); background: white; }
-    .form-field textarea { resize: vertical; min-height: 95px; }
-    #promptField { min-height: 190px; }
+    .form-field input, .form-field textarea { width: 100%; border: 1px solid #d0d5dd; border-radius: 11px; padding: 12px 13px; color: var(--ink); background: white; }
+    .form-field input { min-height: 47px; }
+    .form-field textarea { resize: vertical; min-height: 110px; }
+    #promptField { min-height: 220px; }
     .form-hint { margin: -7px 0 14px; font-size: 12px; color: var(--muted); }
     .modal-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; }
     .toast {
@@ -159,7 +197,8 @@
       .prompt-card { padding: 16px; }
       .card-title { font-size: 16px; }
       .intro-row h2 { font-size: 16px; }
-      .modal { padding: 18px; }
+      .modal { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 18px; border-radius: 18px; }
+      #promptField { min-height: 175px; }
     }
     @media (max-width: 380px) {
       .brand-copy h1 { font-size: 17px; }
